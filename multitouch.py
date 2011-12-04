@@ -1,8 +1,5 @@
 from __future__ import with_statement
-# originally from http://blog.sendapatch.se/2009/november/macbook-multitouch-in-python.html
 
-
-# {{{ MultitouchSupport
 import time
 import ctypes
 import threading
@@ -82,8 +79,6 @@ def _cfarray_to_list(arr):
         rv.append(CFArrayGetValueAtIndex(arr, i))
     return rv
 
-# }}}
-
 from Queue import Queue
 
 touches_lock = threading.Lock()
@@ -125,8 +120,8 @@ devs = init_multitouch(touch_callback)
 
 flags = FULLSCREEN | HWSURFACE | DOUBLEBUF
 mode = max(display.list_modes(0, flags))
-display.set_mode(mode, flags)
-#display.set_mode((640, 480))
+#display.set_mode(mode, flags)
+display.set_mode((640, 480))
 screen = display.get_surface()
 width, height = screen.get_size()
 
@@ -177,7 +172,7 @@ while True:
         for i, finger in enumerate(fingers):
             vel = finger.normalized.velocity
             #print i, "%.2f, %.2f" % (vel.x, vel.y)
-            t = 0.1
+            t = 0.5
             if -t <= vel.x < t and -t <= vel.y < t:
                 n_still += 1
             elif -2 <= vel.x < 2 and vel.y < -4:
