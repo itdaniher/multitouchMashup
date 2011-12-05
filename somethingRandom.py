@@ -7,7 +7,10 @@ from pygame import draw, display, mouse
 from pygame.locals import *
 from numpy import *
 
-protoflo = Protoflo.Protoflo()
+try:
+	protoflo = Protoflo.Protoflo()
+except:
+	LED = False
 
 pygame.init()
 
@@ -47,12 +50,13 @@ while True:
 		vy = -vel.y
 		posvx = x + vx / 10 * width
 		posvy = y + vy / 10 * height
-		if pos.x < .33:
-			protoflo.LED0.color[0] = int(pos.y*255)
-		if .33 < pos.x < .66:
-			protoflo.LED0.color[1] = int(pos.y*255)
-		if pos.x > .66:
-			protoflo.LED0.color[2] = int(pos.y*255)
+		if LED:
+			if pos.x < .33:
+				protoflo.LED0.color[0] = int(pos.y*255)
+			if .33 < pos.x < .66:
+				protoflo.LED0.color[1] = int(pos.y*255)
+			if pos.x > .66:
+				protoflo.LED0.color[2] = int(pos.y*255)
 		draw.line(screen, 0, p, (posvx, posvy))
 
 	if len(fingers) == 4:
@@ -69,9 +73,11 @@ while True:
 			elif -2 <= vel.x <2  and vel.y > 4:
 				n_up += 1
 		if n_still == 1 and n_down == 3:
-			protoflo.LED0.color = 3*[0]
-			protoflo.setLED0()
+			if LED:
+				protoflo.LED0.color = 3*[0]
+				protoflo.setLED0()
 			break
 	display.flip()
-	protoflo.setLED0()
+	if LED:
+		protoflo.setLED0()
 stop_multitouch(devs)
