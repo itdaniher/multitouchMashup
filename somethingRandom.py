@@ -1,4 +1,5 @@
 from multitouch import *
+import bitarray
 
 import Protoflo
 
@@ -9,6 +10,7 @@ from numpy import *
 
 try:
 	protoflo = Protoflo.Protoflo()
+	LED = True
 except:
 	LED = False
 
@@ -51,12 +53,15 @@ while True:
 		posvx = x + vx / 10 * width
 		posvy = y + vy / 10 * height
 		if LED:
-			if pos.x < .33:
+			if pos.x < .25:
 				protoflo.LED0.color[0] = int(pos.y*255)
-			if .33 < pos.x < .66:
+			if .25 < pos.x < .5:
 				protoflo.LED0.color[1] = int(pos.y*255)
-			if pos.x > .66:
+			if .5 < pos.x < .75:
 				protoflo.LED0.color[2] = int(pos.y*255)
+			if pos.x > .75:
+				protoflo.otherLEDs = bitarray.bitarray(6*[0], endian="little")
+				protoflo.otherLEDs[int(pos.y*6)] = 1
 		draw.line(screen, 0, p, (posvx, posvy))
 
 	if len(fingers) == 4:
@@ -74,10 +79,11 @@ while True:
 				n_up += 1
 		if n_still == 1 and n_down == 3:
 			if LED:
+				protoflo.otherLEDs = bitarray.bitarray(6*[0], endian="little")
 				protoflo.LED0.color = 3*[0]
-				protoflo.setLED0()
+				protoflo.setLEDs()
 			break
 	display.flip()
 	if LED:
-		protoflo.setLED0()
+		protoflo.setLEDs()
 stop_multitouch(devs)
