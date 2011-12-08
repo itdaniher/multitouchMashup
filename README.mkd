@@ -1,0 +1,3 @@
+This is the development repository for a random mashup of a [protoflo](https://github.com/nonolith/protoflo) prototype with my macbook air's multitouch trackpad.
+
+This code allows four fingers to fade an RGB LED and a six-segment LED bar. It's cool.  
